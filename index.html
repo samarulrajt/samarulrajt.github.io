@@ -72,3 +72,65 @@ $ git checkout gh-pages
 
   </body>
 </html>
+
+//browse for images
+	function admin_browse_images()
+	{
+		$dirname = $this->uri->segment(3);
+		
+		
+		foreach(glob("./includes/images/newmedia/$dirname/*.*") as $filename){
+			 
+			 
+			 $new[] = $filename;	
+			
+		}
+		
+		$data['images']  = $new;
+		$this->load->view('pirelli/admin_examples/admin_browse_images_view',$data);		
+		
+		
+	}
+
+
+
+<html>
+<head>
+<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+<script>
+ function getUrlParam(paramName){
+		var reParam = new RegExp('(?:[\?&]|&amp;)' + paramName + '=([^&]+)', 'i') ; 
+		var match = window.location.search.match(reParam) ;
+		return (match && match.length > 1) ? match[1] : '' ;
+ }	
+ function callbuzz(id)
+ {
+	imgurl = $('#'+id).attr('alt');
+	
+	var funcNum = getUrlParam('CKEditorFuncNum'); 
+	//var fileUrl = '/includes/images/loading.gif'; 
+	var fileUrl = imgurl; 
+	window.opener.CKEDITOR.tools.callFunction(funcNum, fileUrl);
+	window.close();
+ }
+</script>
+</head>
+<body>
+<?php 
+if(isset($images) && !empty($images)){ 
+foreach($images as $key=>$value){
+
+ $fullpath = base_url().$images[$key];
+ $arrayData = explode('.',$images[$key]);
+ 
+?>
+<img id="<?php echo $key; ?>" alt="<?php echo $arrayData[1].".".$arrayData[2];?>" src="<?php echo $fullpath; ?>" width="70px" height="width="70px" onclick="callbuzz(<?php echo $key; ?>)"/></br>
+
+<?php }
+
+
+}
+
+?>
+</body>
+</html>
